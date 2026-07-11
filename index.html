@@ -1,0 +1,346 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ProForma — does the building pay?</title>
+<meta name="description" content="Model your operating pro forma: NOI, DSCR, yield on cost, cash-on-cash, and a 10-year cash flow — and answer the lender's #1 question: can the income pay back the loan? Imports your PermitPath, CapStack, and MarketScope runs.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230d1117'/><path d='M7 24 L13 17 L18 20 L25 9' fill='none' stroke='%23a78bfa' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/><circle cx='25' cy='9' r='2.4' fill='%23eab308'/></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0e1016;--panel:#12141d;--card:#171a26;--line:#262b3d;--ink:#eceef4;--dim:#9aa3b8;--faint:#5f6880;
+--purp:#a78bfa;--gold:#eab308;--green:#34d399;--bad:#f87171;--sky:#38bdf8;--amber:#f59e0b}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--purp)}
+header{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(14,16,22,.9);backdrop-filter:blur(10px);z-index:40}
+#logo{font-weight:800;font-size:19px;display:flex;align-items:center;gap:8px;font-family:Fraunces,serif}
+#logo b{color:var(--purp)}
+.hsp{flex:1}
+.pill{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:8px 15px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter}
+.pill.pro{background:var(--gold);border-color:transparent;color:#1c1503}
+.pill.prodone{background:var(--green);border-color:transparent;color:#04211a}
+.tagline{max-width:960px;margin:34px auto 8px;padding:0 20px;text-align:center}
+.tagline h1{font-family:Fraunces,serif;font-size:clamp(27px,4.6vw,42px);font-weight:700}
+.tagline h1 em{color:var(--purp);font-style:italic}
+.tagline p{color:var(--dim);font-size:14.5px;max-width:64ch;margin:12px auto 0}
+#app{display:grid;grid-template-columns:360px 1fr;gap:22px;max-width:1180px;margin:26px auto 40px;padding:0 20px;align-items:start}
+@media(max-width:900px){#app{grid-template-columns:1fr}}
+#inputs{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;position:sticky;top:76px}
+@media(max-width:900px){#inputs{position:static}}
+.lbl{display:block;font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);margin:15px 0 7px}
+.lbl:first-child{margin-top:0}
+.lbl .sub{display:inline;font-weight:400;text-transform:none;letter-spacing:0;color:var(--faint);font-size:11px}
+.tin{width:100%;background:var(--card);border:1px solid var(--line);border-radius:10px;color:var(--ink);padding:10px 12px;font-size:14px;font-family:Inter;outline:none}
+.tin:focus{border-color:var(--purp)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.segrow{display:flex;gap:7px;flex-wrap:wrap}
+.seg{border:1px solid var(--line);background:var(--card);color:var(--dim);border-radius:999px;padding:8px 13px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:Inter}
+.seg.on{border-color:var(--purp);color:var(--purp);background:rgba(167,139,250,.12)}
+.mini{font-size:11.5px;color:var(--faint);margin-top:9px;line-height:1.5}
+.import-box{background:linear-gradient(120deg,rgba(167,139,250,.15),rgba(234,179,8,.06));border:1px solid rgba(167,139,250,.45);border-radius:14px;padding:13px;margin-bottom:6px}
+.import-h{font-size:13.5px;font-weight:700}
+.import-h span{display:block;font-weight:400;color:var(--dim);font-size:12px;margin:3px 0 8px}
+.import-box .tin{margin-top:7px}
+.badge{display:inline-block;font-size:10px;font-weight:700;color:#1c1503;background:var(--gold);border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:1px}
+details.asm{margin-top:15px;border:1px dashed var(--line);border-radius:12px;padding:10px 13px}
+details.asm summary{cursor:pointer;font-size:13px;color:var(--dim);font-weight:600}
+.asmrow{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--dim);margin-top:9px}
+.asmrow input{width:90px;background:var(--card);border:1px solid var(--line);border-radius:8px;color:var(--ink);padding:6px 8px;font-size:13px;text-align:right}
+#out{min-width:0}
+.bigcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+.secl{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--faint);margin:0 0 12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.scorecard{background:linear-gradient(120deg,rgba(167,139,250,.13),rgba(52,211,153,.06));border-color:rgba(167,139,250,.45)}
+.noibig{font-family:Fraunces,serif;font-size:clamp(34px,6vw,54px);font-weight:700;line-height:1;color:var(--purp)}
+.noibig span{font-size:.3em;color:var(--dim);font-weight:600;margin-left:6px}
+.verdict{font-size:14.5px;color:var(--dim);margin-top:10px;line-height:1.6;max-width:60ch}
+.verdict b{color:var(--ink)}
+.v-good{color:var(--green)!important}.v-bad{color:var(--bad)!important}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:16px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:12px 13px}
+.kpi b{display:block;font-family:Fraunces,serif;font-size:21px;font-weight:700}
+.kpi small{font-size:10.5px;color:var(--faint);text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+table.cf{width:100%;border-collapse:collapse;font-size:12.5px}
+table.cf th,table.cf td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line);white-space:nowrap}
+table.cf th:first-child,table.cf td:first-child{text-align:left;color:var(--dim)}
+table.cf th{color:var(--faint);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em}
+.cfwrap{overflow-x:auto}
+.flag{display:flex;gap:10px;font-size:13px;padding:10px 12px;border-radius:12px;margin-bottom:8px;line-height:1.5}
+.f-ok{background:rgba(52,211,153,.09)}.f-warn{background:rgba(245,158,11,.1)}.f-bad{background:rgba(248,113,113,.1)}
+.tip{display:inline-grid;place-items:center;width:15px;height:15px;border-radius:50%;background:var(--line);color:var(--dim);font-size:10px;font-weight:700;cursor:help;position:relative;vertical-align:middle;margin-left:4px}
+.tip:hover,.tip:focus{background:var(--purp);color:#160f2a;outline:none}
+.tipbox{position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);width:220px;background:#0a0c12;border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:11.5px;line-height:1.5;color:var(--ink);font-weight:400;text-transform:none;letter-spacing:0;box-shadow:0 10px 30px rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:.15s;z-index:60}
+.tip:hover .tipbox,.tip:focus .tipbox{opacity:1}
+@media(max-width:640px){.tipbox{left:auto;right:-6px;transform:none;width:190px}}
+.lockedsec{border:1px dashed var(--line);border-radius:13px;padding:14px;color:var(--dim);font-size:13px;margin-top:8px}
+.lockbtn{display:inline-block;background:var(--gold);color:#1c1503;border:none;border-radius:999px;padding:10px 18px;font-weight:700;font-size:13.5px;cursor:pointer;text-decoration:none;margin-top:10px;font-family:Inter}
+.smallbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 15px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter;text-decoration:none}
+.rowbtns{display:flex;gap:9px;flex-wrap:wrap;margin:4px 0 14px}
+.loopbtn{background:linear-gradient(90deg,var(--purp),var(--sky));color:#10091f;border:none;border-radius:999px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:Inter}
+.disc{font-size:11.5px;color:var(--faint);line-height:1.6;margin-top:6px}
+footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size:11.5px;color:var(--faint);line-height:1.7}
+#modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;place-items:center;z-index:80;padding:20px}
+#modal.on{display:grid}
+#mcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;max-width:430px;width:100%;padding:22px;position:relative}
+#mcard h2{font-family:Fraunces,serif;font-size:21px;margin-bottom:8px}
+.closex{position:absolute;top:10px;right:14px;background:none;border:none;color:var(--dim);font-size:22px;cursor:pointer}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:10px 18px;font-size:13.5px;opacity:0;pointer-events:none;transition:.25s;z-index:90}
+#toast.on{opacity:1;transform:translateX(-50%)}
+@media print{header,#inputs,.rowbtns,.lockbtn,.lockedsec,footer,#toast,#modal{display:none!important}body{background:#fff;color:#000}.bigcard{border-color:#ccc;break-inside:avoid}.noibig,.kpi b{color:#000}#app{display:block}}
+</style>
+</head>
+<body>
+<header>
+  <div id="logo"><svg width="25" height="25" viewBox="0 0 32 32"><path d="M6 25 L13 17 L18 20 L26 8" fill="none" stroke="#a78bfa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="8" r="2.6" fill="#eab308"/></svg> Pro<b>Forma</b></div>
+  <div class="hsp"></div>
+  <button class="pill pro" id="proBtn">Go Pro</button>
+</header>
+
+<div class="tagline">
+  <h1>Does the building <em>pay?</em></h1>
+  <p>The lender's first question isn't the timeline or the stack — it's <b>"can the operating income pay back my loan?"</b> Model rents, expenses, NOI, DSCR, yield, and a 10-year cash flow — and fold in your PermitPath, CapStack, and MarketScope runs.</p>
+</div>
+
+<div id="app">
+  <div id="inputs">
+    <div class="import-box">
+      <div class="import-h">&#9889; Close the loop<span>Paste links from the other tools to autofill this pro forma.</span></div>
+      <input class="tin" id="csLink" placeholder="CapStack link &rarr; TDC, loan, rate&hellip;">
+      <input class="tin" id="msLink" placeholder="MarketScope link &rarr; rents, vacancy, units&hellip;">
+      <input class="tin" id="ppLink" placeholder="PermitPath link &rarr; pre-opening carry&hellip;">
+    </div>
+
+    <label class="lbl">Project type</label>
+    <div class="segrow" id="typeRow"></div>
+
+    <label class="lbl" id="sizeLbl">Units <span class="tip" tabindex="0">?<span class="tipbox">Total residential units. For commercial, this switches to leasable square feet.</span></span></label>
+    <input class="tin" id="unitsIn" type="number" value="100" min="1" step="1">
+
+    <label class="lbl" id="rentLbl">Avg rent ($/unit/mo) <span id="msBadge"></span> <span class="tip" tabindex="0">?<span class="tipbox">Average in-place rent across the unit mix. Paste a MarketScope link to pull your comp average.</span></span></label>
+    <input class="tin" id="rentIn" type="number" value="1500" min="0" step="25">
+
+    <div class="row2" style="margin-top:8px">
+      <div><label class="lbl" style="margin-top:0">Vacancy % <span class="tip" tabindex="0">?<span class="tipbox">Long-run stabilized vacancy + credit loss. Lenders usually underwrite 5&ndash;7% even in tight markets.</span></span></label><input class="tin" id="vacIn" type="number" value="7" min="0" max="60" step="0.5"></div>
+      <div><label class="lbl" style="margin-top:0">Other income %</label><input class="tin" id="othIn" type="number" value="4" min="0" max="30" step="0.5"></div>
+    </div>
+
+    <label class="lbl">Operating expenses (% of EGI) <span class="tip" tabindex="0">?<span class="tipbox">Management, taxes, insurance, utilities, repairs, reserves &mdash; everything it costs to run the building, as a share of effective gross income. Multifamily typically runs 35&ndash;45%.</span></span></label>
+    <input class="tin" id="opexIn" type="number" value="38" min="0" max="90" step="1">
+
+    <label class="lbl">Capital &amp; debt <span id="csBadge"></span></label>
+    <div class="row2">
+      <div><input class="tin" id="tdcIn" type="number" value="14000000" step="100000" min="0"><div class="mini" style="margin-top:3px">Total dev cost ($)</div></div>
+      <div><input class="tin" id="loanIn" type="number" value="9100000" step="50000" min="0"><div class="mini" style="margin-top:3px">Senior loan ($)</div></div>
+    </div>
+    <div class="row2" style="margin-top:8px">
+      <div><input class="tin" id="rateIn" type="number" value="6.75" step="0.125" min="0"><div class="mini" style="margin-top:3px">Rate (%/yr)</div></div>
+      <div><input class="tin" id="amortIn" type="number" value="30" step="1" min="1"><div class="mini" style="margin-top:3px">Amortization (yrs)</div></div>
+    </div>
+
+    <details class="asm"><summary>&#9881; Growth &amp; exit assumptions</summary><div id="asmBox">
+      <div class="asmrow">Rent growth %/yr<input type="number" step="0.1" id="a-rg" value="2.5"></div>
+      <div class="asmrow">Expense growth %/yr<input type="number" step="0.1" id="a-eg" value="3"></div>
+      <div class="asmrow">Exit cap rate %<input type="number" step="0.05" id="a-cap" value="5.75"></div>
+      <div class="asmrow">Sale cost %<input type="number" step="0.25" id="a-sale" value="2"></div>
+      <div class="asmrow">Months to stabilize<input type="number" step="1" id="a-stab" value="12"></div>
+    </div></details>
+
+    <p class="mini">Planning math with editable assumptions &mdash; not underwriting, and never tax, legal, or investment advice.</p>
+  </div>
+
+  <div id="out"><div id="results"></div></div>
+</div>
+
+<footer><span>ProForma &middot; a <a href="https://nesoai.github.io/mallory/" target="_blank" rel="noopener">Boundless</a> tool &middot; v1.0 &middot; &copy; 2026 Boundless / Mallory Bailey-Finkley &mdash; all rights reserved &middot; </span>Educational planning estimates only. Verify every figure with your lender, CPA, and counsel. Works with <a href="https://nesoai.github.io/permitpath/">PermitPath</a> + <a href="https://nesoai.github.io/capstack/">CapStack</a> + <a href="https://nesoai.github.io/marketscope/">MarketScope</a>.</footer>
+<div id="modal"><div id="mcard"><button class="closex" id="mClose">&times;</button><h2 id="mTitle"></h2><div id="mBody"></div></div></div>
+<div id="toast"></div>
+
+<script>
+/* ============ PROFORMA v1.0 ============ */
+const BUY_URL="mailto:boundless.mbf@gmail.com?subject=Requesting%20ProForma%20Pro%20%28%2439%29&body=Hi%20Boundless%20%E2%80%94%20I%20would%20like%20ProForma%20Pro.%20Please%20send%20my%20unlock%20code%20and%20how%20to%20pay.";
+const PRICE_TXT="$39 one-time";
+const SERVICE_EMAIL="boundless.mbf@gmail.com";
+const $=id=>document.getElementById(id);
+const KEY='proforma.v1';
+let S=Object.assign({pro:false},(()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}})());
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function toast(t){const x=$('toast');x.textContent=t;x.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>x.classList.remove('on'),2600)}
+const fm=n=>'$'+Math.round(n).toLocaleString('en-US');
+const pc=n=>(n*100).toFixed(1)+'%';
+function mconst(rate,yrs){const r=rate/1200,n=yrs*12;if(r<=0)return 1/n*12;return (r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1))*12;}
+function balAfter(P,rate,yrs,k){const r=rate/1200,n=yrs*12,m=k*12;if(r<=0)return P*(1-m/n);const pay=P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);return P*Math.pow(1+r,m)-pay*(Math.pow(1+r,m)-1)/r;}
+function irr(cf){let lo=-0.95,hi=1.5;const npv=r=>cf.reduce((a,c,i)=>a+c/Math.pow(1+r,i),0);
+  if(npv(lo)*npv(hi)>0)return null;
+  for(let i=0;i<80;i++){const mid=(lo+hi)/2;(npv(lo)*npv(mid)<=0)?hi=mid:lo=mid;}
+  return (lo+hi)/2;}
+
+const TYPES=[['mf','&#127960; Multifamily'],['mix','&#127961; Mixed-use'],['com','&#127970; Commercial (NNN)']];
+let TYPE='mf';
+$('typeRow').innerHTML=TYPES.map(t=>`<button class="seg ${t[0]===TYPE?'on':''}" data-v="${t[0]}">${t[1]}</button>`).join('');
+$('typeRow').querySelectorAll('.seg').forEach(b=>b.onclick=()=>{TYPE=b.dataset.v;
+  $('typeRow').querySelectorAll('.seg').forEach(x=>x.classList.toggle('on',x===b));
+  const com=TYPE==='com';
+  $('sizeLbl').firstChild.textContent=com?'Leasable SF ':'Units ';
+  $('rentLbl').firstChild.textContent=com?'Avg rent ($/SF/yr NNN) ':'Avg rent ($/unit/mo) ';
+  if(com&&+$('rentIn').value>100){$('unitsIn').value=60000;$('rentIn').value=24;$('opexIn').value=12;}
+  if(!com&&+$('rentIn').value<=100){$('unitsIn').value=100;$('rentIn').value=1500;$('opexIn').value=38;}
+  run();});
+
+/* ---- imports (the loop) ---- */
+function b64d(x){x=x.replace(/-/g,'+').replace(/_/g,'/');while(x.length%4)x+='=';return JSON.parse(decodeURIComponent(escape(atob(x))));}
+function payload(url){try{const h=(url||'').split('#s=')[1];return h?b64d(h):null}catch(e){return null}}
+let PP=null;
+$('csLink').oninput=()=>{const p=payload($('csLink').value);if(!p||!p.t)return;
+  $('tdcIn').value=Math.round(p.t);
+  const a=p.a||{};const rate=a.rate||6.75, ltc=a.ltc||65;
+  $('rateIn').value=rate; if(a.amort)$('amortIn').value=a.amort;
+  $('loanIn').value=Math.round((p.v&&p.v.senior!=null)?p.v.senior:p.t*ltc/100);
+  $('csBadge').innerHTML='<span class="badge">from CapStack</span>';
+  toast('&#9989; CapStack imported: TDC, loan, rate');run();};
+$('msLink').oninput=()=>{const p=payload($('msLink').value);if(!p)return;let got=[];
+  if(p.z){const u=parseInt(String(p.z).replace(/[^0-9]/g,''));if(u>0){$('unitsIn').value=u;got.push('units');}}
+  if(p.c&&p.c.length){const rents=p.c.map(c=>parseFloat(c[1])).filter(x=>x>0);
+    if(rents.length){$('rentIn').value=Math.round(rents.reduce((a,b)=>a+b,0)/rents.length);got.push('comp rents');}}
+  if(p.mv!==''&&p.mv!=null&&!isNaN(parseFloat(p.mv))){$('vacIn').value=parseFloat(p.mv);got.push('vacancy');}
+  if(p.d&&!$('csLink').value){$('tdcIn').value=p.d;got.push('TDC');}
+  if(got.length){$('msBadge').innerHTML='<span class="badge">from MarketScope</span>';toast('&#9989; MarketScope imported: '+got.join(', '));run();}};
+$('ppLink').oninput=()=>{const p=payload($('ppLink').value);if(!p||!p.st)return;
+  PP={carry:(+p.d||0)*(+p.r||0)/1200+(+p.o||0),st:p.st};
+  toast('&#9989; PermitPath imported: pre-opening carry');run();};
+
+/* ---- inputs ---- */
+['unitsIn','rentIn','vacIn','othIn','opexIn','tdcIn','loanIn','rateIn','amortIn'].forEach(id=>$(id).oninput=()=>run());
+['a-rg','a-eg','a-cap','a-sale','a-stab'].forEach(id=>$(id).oninput=()=>run());
+
+/* ---- model ---- */
+function compute(){
+  const units=+$('unitsIn').value||0, rent=+$('rentIn').value||0;
+  const vac=(+$('vacIn').value||0)/100, oth=(+$('othIn').value||0)/100, opx=(+$('opexIn').value||0)/100;
+  const tdc=+$('tdcIn').value||0, loan=Math.min(+$('loanIn').value||0,tdc||Infinity);
+  const rate=+$('rateIn').value||0, am=+$('amortIn').value||30;
+  const rg=(+$('a-rg').value||0)/100, eg=(+$('a-eg').value||0)/100;
+  const cap=(+$('a-cap').value||5.75)/100, saleC=(+$('a-sale').value||0)/100, stab=+$('a-stab').value||0;
+  const gpr=TYPE==='com'?units*rent:units*rent*12;
+  const egi=gpr*(1+oth)*(1-vac);
+  const opex=egi*opx, noi=egi-opex;
+  const ds=loan*mconst(rate,am);
+  const dscr=ds>0?noi/ds:null;
+  const equity=Math.max(1,tdc-loan);
+  const cf1=noi-ds;
+  const yoc=tdc>0?noi/tdc:0;
+  const coc=cf1/equity;
+  // 10-yr
+  const yrs=[];let uCF=[-tdc],lCF=[-equity];
+  for(let y=1;y<=10;y++){
+    const g=Math.pow(1+rg,y-1), e=Math.pow(1+eg,y-1);
+    let egiY=gpr*(1+oth)*(1-vac)*g;
+    if(y===1&&stab>0)egiY*=Math.max(0.35,1-stab/24); // lease-up drag on year 1
+    const noiClean=egiY-(gpr*(1+oth)*(1-vac)*opx)*e*(y===1&&stab>0?Math.max(0.75,1-stab/48):1);
+    const n=Math.max(0,noiClean);
+    const c=n-ds;
+    yrs.push({y,egi:egiY,noi:n,ds,cf:c});
+    uCF.push(n);lCF.push(c);
+  }
+  const exitNOI=yrs[9].noi*(1+rg);
+  const gross=cap>0?exitNOI/cap:0, net=gross*(1-saleC);
+  const bal=balAfter(loan,rate,am,10);
+  uCF[10]+=net; lCF[10]+=net-bal;
+  const uIRR=irr(uCF), lIRR=irr(lCF);
+  return {units,rent,vac,oth,opx,tdc,loan,rate,am,gpr,egi,opex,noi,ds,dscr,equity,cf1,yoc,coc,yrs,net,bal,uIRR,lIRR,cap,stab};
+}
+function flags(R){const F=[];
+  if(R.dscr!=null)F.push([R.dscr>=1.20?'ok':(R.dscr>=1.05?'warn':'bad'),
+    `DSCR <b>${R.dscr.toFixed(2)}</b>${R.dscr>=1.20?' &mdash; the income comfortably covers the loan (lender minimum is usually 1.20).':R.dscr>=1.05?' &mdash; thin. Most lenders want 1.20+; trim the loan or grow NOI.':' &mdash; the building cannot pay this loan. Shrink senior debt or raise rents/cut expenses.'}`]);
+  if(R.yoc>0&&R.cap>0)F.push([R.yoc>=R.cap+0.005?'ok':(R.yoc>=R.cap?'warn':'bad'),
+    `Yield on cost <b>${pc(R.yoc)}</b> vs exit cap <b>${pc(R.cap)}</b> &mdash; ${R.yoc>=R.cap+0.005?'a positive development spread; you are creating value.':R.yoc>=R.cap?'razor-thin spread; costs or rents need to move.':'building it costs more than buying it. The deal loses value as designed.'}`]);
+  if(R.cf1<0)F.push(['bad',`Year-one cash flow is <b>${fm(R.cf1)}</b> &mdash; budget operating reserves or resize the loan.`]);
+  if(R.stab>18)F.push(['warn',`${R.stab} months to stabilize is long &mdash; carry and reserves must cover it (PermitPath models the pre-opening carry).`]);
+  return F;}
+
+/* ---- pro ---- */
+function checkCode(c){c=(c||'').trim().toUpperCase();
+  if(!/^PRF-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(c))return false;
+  const b=c.replace(/[^A-Z0-9]/g,'').slice(3);let t=0;for(const ch of b)t+=ch.charCodeAt(0);
+  return t%37===13;}
+function openModal(t,b){$('mTitle').textContent=t;$('mBody').innerHTML=b;$('modal').classList.add('on');}
+$('mClose').onclick=()=>$('modal').classList.remove('on');
+$('modal').onclick=e=>{if(e.target.id==='modal')$('modal').classList.remove('on');};
+function openPro(msg){openModal('ProForma Pro',`<p>${msg||'One unlock, yours forever on this device:'}</p>
+  <ul style="color:var(--dim);font-size:13.5px;line-height:1.9;padding-left:18px;margin:8px 0 14px">
+    <li>The full 10-year cash flow (free shows 3 years)</li>
+    <li>Levered &amp; unlevered IRR + exit analysis</li>
+    <li>Printable lender-ready pro forma exhibit</li></ul>
+  <a class="lockbtn" href="${BUY_URL}" target="_blank" rel="noopener">Request Pro &mdash; ${PRICE_TXT} &rarr;</a>
+  <div style="display:flex;gap:8px;margin-top:14px"><input class="tin" id="codeIn" placeholder="PRF-XXXX-XXXX" style="flex:1">
+  <button class="lockbtn" id="applyCode" style="background:var(--green);color:#04211a;margin:0">Apply</button></div>`);
+  $('applyCode').onclick=()=>{if(checkCode($('codeIn').value)){S.pro=true;save();proUI();$('modal').classList.remove('on');toast('&#127881; Pro unlocked');run();}else toast('That code doesn\u2019t look right');};}
+function proUI(){$('proBtn').textContent=S.pro?'\u2713 Pro':'Go Pro';$('proBtn').className='pill '+(S.pro?'prodone':'pro');}
+$('proBtn').onclick=()=>S.pro?toast('Pro is active on this device \u2713'):openPro();
+
+/* ---- render ---- */
+function run(){
+  const R=compute();
+  if(!R.units||!R.rent){$('results').innerHTML='<div class="bigcard" style="text-align:center;color:var(--dim)">Enter units and rent to model the building.</div>';return;}
+  const good=R.dscr!=null&&R.dscr>=1.20;
+  let h=`<div class="bigcard scorecard">
+    <div class="secl" style="margin-top:0">&#128200; Stabilized net operating income <span class="tip" tabindex="0">?<span class="tipbox">NOI: what the building earns after vacancy and operating expenses, before debt. It is the number every lender sizes the loan from.</span></span></div>
+    <div class="noibig">${fm(R.noi)}<span>/ yr</span></div>
+    <div class="verdict">${R.dscr==null?'Add a loan to answer the lender\u2019s question.':
+      good?`After <b>${fm(R.ds)}</b> of annual debt service, the building clears <b class="v-good">${fm(R.cf1)}</b> a year \u2014 <b class="v-good">yes, the income pays back the loan</b> (DSCR ${R.dscr.toFixed(2)}).`:
+      R.dscr>=1.05?`Debt service of <b>${fm(R.ds)}</b> leaves only <b class="v-bad">${fm(R.cf1)}</b> of cushion \u2014 <b>it pays, barely.</b> Most lenders will ask for a smaller loan (DSCR ${R.dscr.toFixed(2)}, they want 1.20+).`:
+      `Debt service of <b>${fm(R.ds)}</b> exceeds what the building earns \u2014 <b class="v-bad">the income cannot pay back this loan</b> (DSCR ${R.dscr.toFixed(2)}).`}</div>
+    <div class="kpis">
+      <div class="kpi"><b style="color:${R.yoc>=R.cap?'var(--green)':'var(--bad)'}">${pc(R.yoc)}</b><small>Yield on cost <span class="tip" tabindex="0">?<span class="tipbox">NOI &divide; total development cost. Compare it to the exit cap rate \u2014 higher means you are building value.</span></span></small></div>
+      <div class="kpi"><b style="color:${good?'var(--green)':'var(--bad)'}">${R.dscr!=null?R.dscr.toFixed(2)+'x':'\u2014'}</b><small>DSCR <span class="tip" tabindex="0">?<span class="tipbox">Debt service coverage: NOI &divide; annual loan payments. Lenders typically require at least 1.20x.</span></span></small></div>
+      <div class="kpi"><b>${pc(R.coc)}</b><small>Cash-on-cash <span class="tip" tabindex="0">?<span class="tipbox">Year-one cash flow after debt &divide; the equity you put in.</span></span></small></div>
+      <div class="kpi"><b>${S.pro&&R.lIRR!=null?pc(R.lIRR):'\u{1F512}'}</b><small>10-yr levered IRR ${S.pro?'':'<span style="color:var(--gold)">Pro</span>'}</small></div>
+    </div></div>`;
+
+  if(PP){h+=`<div class="bigcard"><div class="secl" style="margin-top:0">&#9203; Pre-opening carry (from PermitPath)</div>
+    <p style="font-size:13.5px;color:var(--dim);margin:0">Your ${PP.st} run carries <b style="color:var(--ink)">${fm(PP.carry)}/month</b> before the doors open. Across your ${R.stab}-month stabilization window budget <b style="color:var(--amber)">${fm(PP.carry*R.stab)}</b> of reserves on top of TDC.</p></div>`;}
+
+  const F=flags(R);
+  if(F.length)h+=`<div class="bigcard"><div class="secl">Reality checks</div>${F.map(f=>`<div class="flag f-${f[0]}"><span>${f[0]==='ok'?'\u2705':f[0]==='warn'?'\u26a0\ufe0f':'\u26d4'}</span><span>${f[1]}</span></div>`).join('')}</div>`;
+
+  const show=S.pro?R.yrs:R.yrs.slice(0,3);
+  h+=`<div class="bigcard"><div class="secl">10-year operating cash flow ${S.pro?'':'<span style="color:var(--gold)">\u00b7 free shows 3 years</span>'}</div>
+    <div class="cfwrap"><table class="cf"><tr><th>Year</th>${show.map(y=>`<th>${y.y}</th>`).join('')}</tr>
+    <tr><td>NOI</td>${show.map(y=>`<td>${fm(y.noi)}</td>`).join('')}</tr>
+    <tr><td>Debt service</td>${show.map(y=>`<td>${fm(-y.ds)}</td>`).join('')}</tr>
+    <tr><td><b>Cash flow</b></td>${show.map(y=>`<td style="color:${y.cf>=0?'var(--green)':'var(--bad)'}"><b>${fm(y.cf)}</b></td>`).join('')}</tr></table></div>
+    ${S.pro?`<p class="mini" style="margin-top:10px">Year-10 exit at a ${pc(R.cap)} cap: gross ${fm(R.net/(1-((+$('a-sale').value||0)/100)))} \u2192 net ${fm(R.net)} \u2192 payoff ${fm(R.bal)} \u2192 <b style="color:var(--ink)">equity proceeds ${fm(R.net-R.bal)}</b>. Unlevered IRR ${R.uIRR!=null?pc(R.uIRR):'\u2014'} \u00b7 levered IRR ${R.lIRR!=null?pc(R.lIRR):'\u2014'}.</p>`:
+    `<div class="lockedsec"><b>&#128274; Years 4\u201310, exit analysis &amp; IRR \u2014 Pro.</b> The full decade, the sale, the loan payoff, and both IRRs. <button class="lockbtn" onclick="openPro()">Unlock \u2014 ${PRICE_TXT}</button></div>`}</div>`;
+
+  // the loop back to CapStack
+  const csPayload={t:R.tdc,n:Math.round(R.noi),p:'mkt',o:['senior','equity'],v:{},a:{rate:R.rate,amort:R.am,dscr:1.20,ltc:65,cprice:0.87,basis:80,hprice:0.90,qre:75,fee:12,defer:60}};
+  const csURL='https://nesoai.github.io/capstack/#s='+btoa(unescape(encodeURIComponent(JSON.stringify(csPayload)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  h+=`<div class="bigcard"><div class="secl">Close the loop</div>
+    <p style="font-size:13.5px;color:var(--dim);margin:0 0 12px">This NOI (<b style="color:var(--ink)">${fm(R.noi)}</b>) is what sizes your senior loan. Send it to CapStack and the stack rebuilds around what the building can actually carry.</p>
+    <div class="rowbtns" style="margin:0"><a class="loopbtn" style="text-decoration:none" href="${csURL}" target="_blank" rel="noopener">&#8594; Rebuild my stack in CapStack</a></div></div>`;
+
+  const scen='NOI '+fm(R.noi)+' \u00b7 DSCR '+(R.dscr!=null?R.dscr.toFixed(2):'\u2014')+' \u00b7 YoC '+pc(R.yoc)+' \u00b7 '+R.units+(TYPE==='com'?' SF':' units');
+  const mail='mailto:'+SERVICE_EMAIL+'?subject='+encodeURIComponent('ProForma \u2014 build my full operating model')+'&body='+encodeURIComponent('Hi Boundless,\n\nPlease quote a full 10-year operating model / pro forma package.\n\nScenario: '+scen+'\n\nProject details:\nTiming:\n');
+  h+=`<div class="bigcard"><div class="secl">Done for you \u2014 by the Boundless team</div>
+    <p style="font-size:13.5px;color:var(--dim);margin:0 0 12px">Bank-ready operating models, sensitivity tables, and lender narratives \u2014 built on an MBA + civil-engineering foundation. Typical engagements $500\u2013$4,000.</p>
+    <div class="rowbtns" style="margin:0"><a class="smallbtn" href="${mail}">&#128231; Email this scenario</a>
+    <button class="smallbtn" id="shareBtn">&#128279; Share</button>
+    <button class="smallbtn" id="printBtn">&#128424; Lender exhibit ${S.pro?'':'\u{1F512}'}</button></div></div>
+  <p class="disc"><b>Read this:</b> ProForma is an educational planning tool. Rents, expenses, cap rates, and lending standards vary by market and year \u2014 every number here is a starting point for conversations with your lender, property manager, CPA, and attorney, not a substitute for them.</p>`;
+
+  $('results').innerHTML=h;
+  $('shareBtn').onclick=async()=>{
+    const p={u:+$('unitsIn').value,r:+$('rentIn').value,v:+$('vacIn').value,o:+$('othIn').value,x:+$('opexIn').value,
+      t:+$('tdcIn').value,l:+$('loanIn').value,i:+$('rateIn').value,m:+$('amortIn').value,ty:TYPE,
+      rg:+$('a-rg').value,eg:+$('a-eg').value,cp:+$('a-cap').value,sc:+$('a-sale').value,st:+$('a-stab').value};
+    const url=location.origin+location.pathname+'#s='+btoa(unescape(encodeURIComponent(JSON.stringify(p)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+    try{if(navigator.share)await navigator.share({title:'ProForma scenario',url});else{await navigator.clipboard.writeText(url);toast('\u{1F517} Link copied');}}catch(e){try{await navigator.clipboard.writeText(url);toast('\u{1F517} Link copied');}catch(_){}}};
+  $('printBtn').onclick=()=>{if(!S.pro)return openPro('The lender exhibit is a Pro feature.');window.print();};
+}
+
+/* ---- load shared ---- */
+(function(){if(!location.hash.startsWith('#s='))return;
+  try{const p=b64d(location.hash.slice(3));
+    if(p.ty){TYPE=p.ty;$('typeRow').querySelectorAll('.seg').forEach(x=>x.classList.toggle('on',x.dataset.v===TYPE));}
+    const map={u:'unitsIn',r:'rentIn',v:'vacIn',o:'othIn',x:'opexIn',t:'tdcIn',l:'loanIn',i:'rateIn',m:'amortIn',rg:'a-rg',eg:'a-eg',cp:'a-cap',sc:'a-sale',st:'a-stab'};
+    Object.keys(map).forEach(k=>{if(p[k]!=null)$(map[k]).value=p[k];});
+    toast('Loaded shared scenario');}catch(e){}})();
+proUI();run();
+</script>
+</body></html>
