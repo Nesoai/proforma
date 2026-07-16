@@ -154,9 +154,9 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
 
 <script>
 /* ============ PROFORMA v1.0 ============ */
-const BUY_URL="mailto:boundless.mbf@gmail.com?subject=Requesting%20ProForma%20Pro%20%28%2439%29&body=Hi%20Boundless%20%E2%80%94%20I%20would%20like%20ProForma%20Pro.%20Please%20send%20my%20unlock%20code%20and%20how%20to%20pay.";
+const BUY_URL="mailto:nesoai.us@gmail.com?subject=Requesting%20ProForma%20Pro%20%28%2439%29&body=Hi%20Boundless%20%E2%80%94%20I%20would%20like%20ProForma%20Pro.%20Please%20send%20my%20unlock%20code%20and%20how%20to%20pay.";
 const PRICE_TXT="$39 one-time";
-const SERVICE_EMAIL="boundless.mbf@gmail.com";
+const SERVICE_EMAIL="nesoai.us@gmail.com";
 const $=id=>document.getElementById(id);
 const KEY='proforma.v1';
 let S=Object.assign({pro:false},(()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}})());
@@ -255,10 +255,18 @@ function flags(R){const F=[];
   return F;}
 
 /* ---- pro ---- */
-function checkCode(c){c=(c||'').trim().toUpperCase();
-  if(!/^PRF-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(c))return false;
-  const b=c.replace(/[^A-Z0-9]/g,'').slice(3);let t=0;for(const ch of b)t+=ch.charCodeAt(0);
-  return t%37===13;}
+const REDEEM_URL='https://neso-pro.nesoai-us.workers.dev/redeem'; // <- update after deploying neso-pro-worker.js
+async function redeemCode(c){
+  c=(c||'').trim().toUpperCase();
+  if(!/^PRF-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(c)) return {ok:false,msg:'That code doesn\u2019t look right'};
+  try{
+    const r=await fetch(REDEEM_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tool:'proforma',code:c})});
+    const j=await r.json();
+    if(j.ok) return {ok:true};
+    if(j.reason==='used') return {ok:false,msg:'That code has already been used'};
+    return {ok:false,msg:'That code doesn\u2019t look right'};
+  }catch(e){ return {ok:false,msg:'Couldn\u2019t reach the unlock server \u2014 check your connection and try again'}; }
+}
 function openModal(t,b){$('mTitle').textContent=t;$('mBody').innerHTML=b;$('modal').classList.add('on');}
 $('mClose').onclick=()=>$('modal').classList.remove('on');
 $('modal').onclick=e=>{if(e.target.id==='modal')$('modal').classList.remove('on');};
@@ -270,7 +278,7 @@ function openPro(msg){openModal('ProForma Pro',`<p>${msg||'One unlock, yours for
   <a class="lockbtn" href="${BUY_URL}" target="_blank" rel="noopener">Request Pro &mdash; ${PRICE_TXT} &rarr;</a>
   <div style="display:flex;gap:8px;margin-top:14px"><input class="tin" id="codeIn" placeholder="PRF-XXXX-XXXX" style="flex:1">
   <button class="lockbtn" id="applyCode" style="background:var(--green);color:#04211a;margin:0">Apply</button></div>`);
-  $('applyCode').onclick=()=>{if(checkCode($('codeIn').value)){S.pro=true;save();proUI();$('modal').classList.remove('on');toast('&#127881; Pro unlocked');run();}else toast('That code doesn\u2019t look right');};}
+  $('applyCode').onclick=async()=>{const b=$('applyCode');b.disabled=true;b.textContent='\u2026';const r=await redeemCode($('codeIn').value);b.disabled=false;b.textContent='Apply';if(r.ok){S.pro=true;save();proUI();$('modal').classList.remove('on');toast('\ud83c\udf89 Pro unlocked');run();}else toast(r.msg);};}
 function proUI(){$('proBtn').textContent=S.pro?'\u2713 Pro':'Go Pro';$('proBtn').className='pill '+(S.pro?'prodone':'pro');}
 $('proBtn').onclick=()=>S.pro?toast('Pro is active on this device \u2713'):openPro();
 
