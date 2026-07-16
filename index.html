@@ -18,6 +18,28 @@ header{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:
 .pill.pro{background:var(--gold);border-color:transparent;color:#1c1503}
 .pill.prodone{background:var(--green);border-color:transparent;color:#04211a}
 .tagline{max-width:960px;margin:34px auto 8px;padding:0 20px;text-align:center}
+/* how-it-works strip */
+.flow{display:flex;align-items:stretch;gap:0;max-width:980px;margin:16px auto 0;padding:0 16px}
+.flow .fstep{flex:1;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px 13px;text-align:left;display:flex;gap:10px;align-items:flex-start;min-width:0}
+.flow .fn{width:24px;height:24px;border-radius:50%;background:var(--purp);color:#160f26;font-weight:800;font-size:12.5px;display:grid;place-items:center;flex-shrink:0;margin-top:1px}
+.flow .ft b{display:block;font-size:12.5px;color:var(--ink)}
+.flow .ft span{font-size:11.5px;color:var(--dim);line-height:1.45}
+.flow .farrow{align-self:center;color:var(--faint);font-size:17px;padding:0 7px;flex-shrink:0}
+@media(max-width:700px){.flow{flex-direction:column;gap:6px}.flow .farrow{transform:rotate(90deg);align-self:center;padding:0}}
+/* example deal */
+.exbtn{width:100%;border:1px dashed var(--purp);background:rgba(167,139,250,.07);color:var(--purp);border-radius:10px;padding:10px;font-weight:700;font-size:13px;cursor:pointer;margin-bottom:14px}
+.exbtn:hover{background:rgba(167,139,250,.14)}
+.exbanner{display:none;background:rgba(52,211,153,.08);border:1px solid rgba(52,211,153,.35);border-radius:10px;padding:9px 12px;font-size:12.5px;color:var(--dim);margin-bottom:14px}
+.exbanner b{color:var(--green)}
+/* guided tour */
+.tourhl{outline:2px solid var(--purp);outline-offset:3px;border-radius:10px;transition:outline .2s}
+#tourCard{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(140%);width:min(440px,92vw);background:var(--card);border:1px solid var(--purp);border-radius:14px;padding:15px 17px;z-index:95;box-shadow:0 18px 50px -12px rgba(0,0,0,.6);transition:transform .3s}
+#tourCard.on{transform:translateX(-50%) translateY(0)}
+#tourCard .tstep{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--purp);text-transform:uppercase}
+#tourCard .ttext{font-size:13.5px;color:var(--ink);margin:5px 0 12px;line-height:1.5}
+#tourCard .tbtns{display:flex;gap:8px;justify-content:flex-end}
+#tourCard .tbtns button{border:1px solid var(--line);background:var(--panel);color:var(--dim);border-radius:8px;padding:7px 14px;font-size:12.5px;font-weight:600;cursor:pointer}
+#tourCard .tbtns button.pri{background:var(--purp);border-color:var(--purp);color:#160f26}
 .tagline h1{font-family:Fraunces,serif;font-size:clamp(27px,4.6vw,42px);font-weight:700}
 .tagline h1 em{color:var(--purp);font-style:italic}
 .tagline p{color:var(--dim);font-size:14.5px;max-width:64ch;margin:12px auto 0}
@@ -83,13 +105,14 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
 .closex{position:absolute;top:10px;right:14px;background:none;border:none;color:var(--dim);font-size:22px;cursor:pointer}
 #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--line);color:var(--ink);border-radius:999px;padding:10px 18px;font-size:13.5px;opacity:0;pointer-events:none;transition:.25s;z-index:90}
 #toast.on{opacity:1;transform:translateX(-50%)}
-@media print{header,#inputs,.rowbtns,.lockbtn,.lockedsec,footer,#toast,#modal{display:none!important}body{background:#fff;color:#000}.bigcard{border-color:#ccc;break-inside:avoid}.noibig,.kpi b{color:#000}#app{display:block}}
+@media print{header,#inputs,.rowbtns,.lockbtn,.lockedsec,footer,#toast,#modal,.flow,#tourCard,.exbtn,.exbanner{display:none!important}body{background:#fff;color:#000}.bigcard{border-color:#ccc;break-inside:avoid}.noibig,.kpi b{color:#000}#app{display:block}}
 </style>
 </head>
 <body>
 <header>
   <div id="logo"><svg width="25" height="25" viewBox="0 0 32 32"><path d="M6 25 L13 17 L18 20 L26 8" fill="none" stroke="#a78bfa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="8" r="2.6" fill="#eab308"/></svg> Pro<b>Forma</b></div>
   <div class="hsp"></div>
+  <button class="pill" id="tourBtn" title="Replay the 60-second tour">&#127891; Tour</button>
   <button class="pill pro" id="proBtn">Go Pro</button>
 </header>
 
@@ -98,8 +121,18 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
   <p>The lender's first question isn't the timeline or the stack — it's <b>"can the operating income pay back my loan?"</b> Model rents, expenses, NOI, DSCR, yield, and a 10-year cash flow — and fold in your PermitPath, CapStack, and MarketScope runs.</p>
 </div>
 
+<div class="flow" aria-label="How ProForma works">
+  <div class="fstep"><div class="fn">1</div><div class="ft"><b>Enter the operations</b><span>Units, rent, vacancy, expenses &mdash; or paste your MarketScope &amp; CapStack links to autofill.</span></div></div>
+  <div class="farrow">&rarr;</div>
+  <div class="fstep"><div class="fn">2</div><div class="ft"><b>Add the debt</b><span>Total cost, loan, rate, amortization &mdash; the numbers the loan lives or dies on.</span></div></div>
+  <div class="farrow">&rarr;</div>
+  <div class="fstep"><div class="fn">3</div><div class="ft"><b>Read the answer</b><span>NOI, DSCR, yield on cost, cash-on-cash, and the 10-year cash flow &mdash; the lender&#8217;s question, answered.</span></div></div>
+</div>
+
 <div id="app">
   <div id="inputs">
+    <button class="exbtn" id="exBtn">&#9654; Load an example deal &mdash; see the answer first</button>
+    <div class="exbanner" id="exBanner"><b>Harborview Lofts</b> &mdash; the same 96-unit New Bedford deal from MarketScope: $21.5M cost, $14M senior loan, $1,950 average rents. Watch the DSCR &mdash; then edit anything; it&#8217;s yours the moment you type.</div>
     <div class="import-box">
       <div class="import-h">&#9889; Close the loop<span>Paste links from the other tools to autofill this pro forma.</span></div>
       <input class="tin" id="csLink" placeholder="CapStack link &rarr; TDC, loan, rate&hellip;">
@@ -148,9 +181,14 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
   <div id="out"><div id="results"></div></div>
 </div>
 
-<footer><span>ProForma &middot; a <a href="https://nesoai.github.io/mallory/" target="_blank" rel="noopener">Boundless</a> tool &middot; v1.0 &middot; &copy; 2026 Boundless / Mallory Bailey-Finkley &mdash; all rights reserved &middot; </span>Educational planning estimates only. Verify every figure with your lender, CPA, and counsel. Works with <a href="https://nesoai.github.io/permitpath/">PermitPath</a> + <a href="https://nesoai.github.io/capstack/">CapStack</a> + <a href="https://nesoai.github.io/marketscope/">MarketScope</a>.</footer>
+<footer><span>ProForma &middot; a <a href="https://nesoai.github.io/mallory/" target="_blank" rel="noopener">Boundless</a> tool &middot; v1.2 &middot; &copy; 2026 Boundless / Mallory Bailey-Finkley &mdash; all rights reserved &middot; </span>Educational planning estimates only. Verify every figure with your lender, CPA, and counsel. Works with <a href="https://nesoai.github.io/permitpath/">PermitPath</a> + <a href="https://nesoai.github.io/capstack/">CapStack</a> + <a href="https://nesoai.github.io/marketscope/">MarketScope</a>.</footer>
 <div id="modal"><div id="mcard"><button class="closex" id="mClose">&times;</button><h2 id="mTitle"></h2><div id="mBody"></div></div></div>
 <div id="toast"></div>
+<div id="tourCard" role="dialog" aria-label="Guided tour">
+  <div class="tstep" id="tourStep"></div>
+  <div class="ttext" id="tourText"></div>
+  <div class="tbtns"><button id="tourSkip">Skip</button><button class="pri" id="tourNext">Next</button></div>
+</div>
 
 <script>
 /* ============ PROFORMA v1.0 ============ */
@@ -208,6 +246,44 @@ $('ppLink').oninput=()=>{const p=payload($('ppLink').value);if(!p||!p.st)return;
 /* ---- inputs ---- */
 ['unitsIn','rentIn','vacIn','othIn','opexIn','tdcIn','loanIn','rateIn','amortIn'].forEach(id=>$(id).oninput=()=>run());
 ['a-rg','a-eg','a-cap','a-sale','a-stab'].forEach(id=>$(id).oninput=()=>run());
+
+/* ============ EXAMPLE DEAL ============ */
+function loadExample(){
+  TYPE='mf';
+  $('typeRow').querySelectorAll('.seg').forEach(x=>x.classList.toggle('on',x.dataset.v==='mf'));
+  $('unitsIn').value=96; $('rentIn').value=1950; $('vacIn').value=6; $('othIn').value=4; $('opexIn').value=40;
+  $('tdcIn').value=21500000; $('loanIn').value=14000000; $('rateIn').value=6.5; $('amortIn').value=30;
+  $('a-rg').value=2.5; $('a-eg').value=3; $('a-cap').value=5.75; $('a-sale').value=2; $('a-stab').value=12;
+  run();
+  $('exBanner').style.display='block';
+  toast('Example loaded \u2014 edit anything, it\u2019s yours now');
+  try{ if(typeof gtag==='function') gtag('event','example_load',{tool:'proforma'}); }catch(e){}
+}
+$('exBtn').onclick=loadExample;
+
+/* ============ GUIDED TOUR ============ */
+const TOUR=[
+ ['rentIn','Step 1 of 5','It starts with <b>rent and vacancy</b>. Everything downstream \u2014 NOI, DSCR, the whole verdict \u2014 flows from these two numbers, so anchor them to real comps.'],
+ ['opexIn','Step 2 of 5','<b>Operating expenses</b> as a % of income. New builds often pencil at 35\u201342%; if you\u2019re below 30%, a lender will ask why.'],
+ ['tdcIn','Step 3 of 5','The <b>capital &amp; debt block</b>: total cost, loan, rate, amortization. This is where the lender\u2019s question lives \u2014 can the income cover this payment?'],
+ ['out','Step 4 of 5','The <b>verdict, live</b>: DSCR, yield on cost, cash-on-cash, and the cash flow. Green means the building pays; the flags tell you what to fix when it doesn\u2019t.'],
+ ['exBtn','Step 5 of 5','Fastest way to learn it: <b>load the example deal</b> and stress it \u2014 raise the rate, drop the rent, watch the DSCR react. Nothing is saved anywhere but this device.']
+];
+let tourI=-1;
+function tourClear(){document.querySelectorAll('.tourhl').forEach(e=>e.classList.remove('tourhl'));}
+function tourShow(i){
+  tourClear();
+  if(i>=TOUR.length){ $('tourCard').classList.remove('on'); try{localStorage.setItem('proforma.tour','done')}catch(e){}; return; }
+  tourI=i; const [id,st,tx]=TOUR[i];
+  const el=$(id); if(el){ el.classList.add('tourhl'); el.scrollIntoView({behavior:'smooth',block:'center'}); }
+  $('tourStep').textContent=st; $('tourText').innerHTML=tx;
+  $('tourNext').textContent = i===TOUR.length-1 ? 'Done' : 'Next';
+  $('tourCard').classList.add('on');
+}
+$('tourNext').onclick=()=>tourShow(tourI+1);
+$('tourSkip').onclick=()=>tourShow(TOUR.length);
+$('tourBtn').onclick=()=>tourShow(0);
+setTimeout(()=>{ try{ if(!localStorage.getItem('proforma.tour')) tourShow(0); }catch(e){} },1100);
 
 /* ---- model ---- */
 function compute(){
