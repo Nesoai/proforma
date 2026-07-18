@@ -112,6 +112,10 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
 .probarin .pb{flex:1;min-width:240px;font-size:12.5px;color:var(--dim);line-height:1.5}
 .probarin button{border:none;border-radius:999px;background:var(--purp);color:#0b1018;font-weight:700;font-size:12.5px;padding:9px 16px;cursor:pointer;font-family:inherit;white-space:nowrap}
 @media print{.probar{display:none!important}}
+#scrollTop{position:fixed;right:20px;bottom:20px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card,#161d26);color:var(--ink,#e9eef4);font-size:20px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:70;box-shadow:0 6px 18px -6px rgba(0,0,0,.4);font-family:inherit;line-height:1}
+#scrollTop.on{display:flex}
+#scrollTop:hover{filter:brightness(1.12)}
+@media print{#scrollTop{display:none!important}}
 </style>
 </head>
 <body>
@@ -188,7 +192,8 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
   <div id="out"><div id="results"></div></div>
 </div>
 
-<footer><span>ProForma &middot; a <a href="https://nesoai.github.io/mallory/" target="_blank" rel="noopener">Boundless</a> tool &middot; v1.5 &middot; <a href="https://tally.so/r/rj1Z15?source=proforma" target="_blank" rel="noopener">Feedback</a> &middot; &copy; 2026 Boundless / Mallory Bailey-Finkley &mdash; all rights reserved &middot; </span>Educational planning estimates only. Verify every figure with your lender, CPA, and counsel. Works with <a href="https://nesoai.github.io/permitpath/">PermitPath</a> + <a href="https://nesoai.github.io/capstack/">CapStack</a> + <a href="https://nesoai.github.io/marketscope/">MarketScope</a>.</footer>
+<button id="scrollTop" title="Back to top" aria-label="Back to top">↑</button>
+<footer><span>ProForma &middot; a <a href="https://nesoai.github.io/mallory/" target="_blank" rel="noopener">Boundless</a> tool &middot; v1.6 &middot; <a href="https://tally.so/r/rj1Z15?source=proforma" target="_blank" rel="noopener">Feedback</a> &middot; &copy; 2026 Boundless &mdash; all rights reserved &middot; </span>Educational planning estimates only. Verify every figure with your lender, CPA, and counsel. Works with <a href="https://nesoai.github.io/permitpath/">PermitPath</a> + <a href="https://nesoai.github.io/capstack/">CapStack</a> + <a href="https://nesoai.github.io/marketscope/">MarketScope</a>.</footer>
 <div id="modal"><div id="mcard"><button class="closex" id="mClose">&times;</button><h2 id="mTitle"></h2><div id="mBody"></div></div></div>
 <div id="toast"></div>
 <div id="tourCard" role="dialog" aria-label="Guided tour">
@@ -433,5 +438,11 @@ function run(){
     Object.keys(map).forEach(k=>{if(p[k]!=null)$(map[k]).value=p[k];});
     toast('Loaded shared scenario');}catch(e){}})();
 proUI();run();
+
+/* scroll-to-top */
+(function(){function init(){var b=document.getElementById('scrollTop');if(!b)return;
+ window.addEventListener('scroll',function(){b.classList.toggle('on',window.scrollY>400)},{passive:true});
+ b.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};}
+ if(document.getElementById('scrollTop'))init();else document.addEventListener('DOMContentLoaded',init);})();
 </script>
 </body></html>
