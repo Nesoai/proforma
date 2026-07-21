@@ -1,7 +1,7 @@
 <!DOCTYPE html><html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ProForma — does the building pay?</title>
-<meta name="description" content="Model your operating pro forma: NOI, DSCR, yield on cost, cash-on-cash, and a 10-year cash flow — and answer the lender's #1 question: can the income pay back the loan? Imports your Bird&#8217;s Eye, CapStack, and MarketScope runs.">
+<meta name="description" content="Model your operating pro forma: NOI, DSCR, yield on cost, cash-on-cash, and a 10-year cash flow — and answer the lender's #1 question: can the income pay back the loan? Imports your PermitPath, CapStack, and MarketScope runs.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230d1117'/><path d='M7 24 L13 17 L18 20 L25 9' fill='none' stroke='%23a78bfa' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/><circle cx='25' cy='9' r='2.4' fill='%23eab308'/></svg>">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;0,9..144,700;1,9..144,600&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
@@ -33,8 +33,9 @@ header{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:
 .exbanner b{color:var(--green)}
 /* guided tour */
 .tourhl{outline:2px solid var(--purp);outline-offset:3px;border-radius:10px;transition:outline .2s}
-#tourCard{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(140%);width:min(440px,92vw);background:var(--card);border:1px solid var(--purp);border-radius:14px;padding:15px 17px;z-index:95;box-shadow:0 18px 50px -12px rgba(0,0,0,.6);transition:transform .3s}
+#tourCard{position:fixed;left:50%;bottom:18px;transform:translateX(-50%) translateY(140%);width:min(440px,92vw);background:var(--card);border:1px solid var(--purp);border-radius:14px;padding:15px 17px;z-index:200;box-shadow:0 18px 50px -12px rgba(0,0,0,.6);transition:transform .3s}
 #tourCard.on{transform:translateX(-50%) translateY(0)}
+#tourCard.on~#nchatBtn{display:none!important}
 #tourCard .tstep{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--purp);text-transform:uppercase}
 #tourCard .ttext{font-size:13.5px;color:var(--ink);margin:5px 0 12px;line-height:1.5}
 #tourCard .tbtns{display:flex;gap:8px;justify-content:flex-end}
@@ -96,6 +97,10 @@ table.cf th{color:var(--faint);font-size:10.5px;text-transform:uppercase;letter-
 .smallbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:9px 15px;font-size:13px;font-weight:600;cursor:pointer;font-family:Inter;text-decoration:none}
 .rowbtns{display:flex;gap:9px;flex-wrap:wrap;margin:4px 0 14px}
 .loopbtn{background:linear-gradient(90deg,var(--purp),var(--sky));color:#10091f;border:none;border-radius:999px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer;font-family:Inter}
+.cta-neso{display:flex;gap:13px;align-items:center;background:linear-gradient(120deg,rgba(52,211,153,.07),rgba(167,139,250,.05));border:1px solid var(--line);border-radius:12px;padding:15px 17px;margin-top:16px;flex-wrap:wrap}
+.cta-neso p{font-size:13px;color:var(--dim);flex:1;min-width:220px}
+.cta-neso b{color:var(--ink)}
+.cta-neso a{background:var(--green);color:#04211a;font-weight:700;font-size:13px;border-radius:999px;padding:10px 17px;text-decoration:none}
 .disc{font-size:11.5px;color:var(--faint);line-height:1.6;margin-top:6px}
 footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size:11.5px;color:var(--faint);line-height:1.7}
 #modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;place-items:center;z-index:80;padding:20px}
@@ -128,7 +133,7 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
 
 <div class="tagline">
   <h1>Does the building <em>pay?</em></h1>
-  <p>The lender's first question isn't the timeline or the stack — it's <b>"can the operating income pay back my loan?"</b> Model rents, expenses, NOI, DSCR, yield, and a 10-year cash flow — and fold in your Bird&#8217;s Eye, CapStack, and MarketScope runs.</p>
+  <p>The lender's first question isn't the timeline or the stack — it's <b>"can the operating income pay back my loan?"</b> Model rents, expenses, NOI, DSCR, yield, and a 10-year cash flow — and fold in your PermitPath, CapStack, and MarketScope runs.</p>
 </div>
 
 <div class="flow" aria-label="How ProForma works">
@@ -148,7 +153,7 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
       <div class="import-h">&#9889; Close the loop<span>Paste links from the other tools to autofill this pro forma.</span></div>
       <input class="tin" id="csLink" placeholder="CapStack link &rarr; TDC, loan, rate&hellip;">
       <input class="tin" id="msLink" placeholder="MarketScope link &rarr; rents, vacancy, units&hellip;">
-      <input class="tin" id="ppLink" placeholder="Bird&#8217;s Eye instant-read link &rarr; pre-opening carry&hellip;">
+      <input class="tin" id="ppLink" placeholder="PermitPath link &rarr; pre-opening carry&hellip;">
     </div>
 
     <label class="lbl">Project type</label>
@@ -193,7 +198,7 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
 </div>
 
 <button id="scrollTop" title="Back to top" aria-label="Back to top">↑</button>
-<footer><span>ProForma &middot; v1.8 &middot; <a href="https://tally.so/r/rj1Z15?source=proforma" target="_blank" rel="noopener">Feedback</a> &middot; &copy; 2026 Boundless &mdash; all rights reserved &middot; </span>Educational planning estimates only. Verify every figure with your lender, CPA, and counsel. Works with <a href="https://nesoai.github.io/birdseye/">Bird&#8217;s Eye</a> + <a href="https://nesoai.github.io/capstack/">CapStack</a> + <a href="https://nesoai.github.io/marketscope/">MarketScope</a>.</footer>
+<footer><span>ProForma &middot; a <a href="https://nesoai.github.io/mallory/" target="_blank" rel="noopener">Boundless</a> tool &middot; v1.7 &middot; <a href="https://neso-queue.nesoai-us.workers.dev/form/feedback?source=proforma" target="_blank" rel="noopener">Feedback</a> &middot; &copy; 2026 Boundless &mdash; all rights reserved &middot; </span>Educational planning estimates only. Verify every figure with your lender, CPA, and counsel. Works with <a href="https://nesoai.github.io/permitpath/">PermitPath</a> + <a href="https://nesoai.github.io/capstack/">CapStack</a> + <a href="https://nesoai.github.io/marketscope/">MarketScope</a>.</footer>
 <div id="modal"><div id="mcard"><button class="closex" id="mClose">&times;</button><h2 id="mTitle"></h2><div id="mBody"></div></div></div>
 <div id="toast"></div>
 <div id="tourCard" role="dialog" aria-label="Guided tour">
@@ -207,6 +212,7 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
 const BUY_URL="https://nesoai.gumroad.com/l/uiwox";
 const PRICE_TXT="$39 one-time";
 const SERVICE_EMAIL="nesoai.us@gmail.com";
+const NESO_CTA="https://neso-queue.nesoai-us.workers.dev/form/intake?track=re&services="+encodeURIComponent("Development Feasibility (Standard)")+"&credits=12&source=proforma";
 const $=id=>document.getElementById(id);
 const KEY='proforma.v1';
 let S=Object.assign({pro:false},(()=>{try{return JSON.parse(localStorage.getItem(KEY))||{}}catch(e){return{}}})());
@@ -253,7 +259,7 @@ $('msLink').oninput=()=>{const p=payload($('msLink').value);if(!p)return;let got
   if(got.length){$('msBadge').innerHTML='<span class="badge">from MarketScope</span>';toast('&#9989; MarketScope imported: '+got.join(', '));run();}};
 $('ppLink').oninput=()=>{const p=payload($('ppLink').value);if(!p||!p.st)return;
   PP={carry:(+p.d||0)*(+p.r||0)/1200+(+p.o||0),st:p.st};
-  toast('&#9989; Bird&#8217;s Eye imported: pre-opening carry');run();};
+  toast('&#9989; PermitPath imported: pre-opening carry');run();};
 
 /* ---- inputs ---- */
 ['unitsIn','rentIn','vacIn','othIn','opexIn','tdcIn','loanIn','rateIn','amortIn'].forEach(id=>$(id).oninput=()=>run());
@@ -339,7 +345,7 @@ function flags(R){const F=[];
   if(R.yoc>0&&R.cap>0)F.push([R.yoc>=R.cap+0.005?'ok':(R.yoc>=R.cap?'warn':'bad'),
     `Yield on cost <b>${pc(R.yoc)}</b> vs exit cap <b>${pc(R.cap)}</b> &mdash; ${R.yoc>=R.cap+0.005?'a positive development spread; you are creating value.':R.yoc>=R.cap?'razor-thin spread; costs or rents need to move.':'building it costs more than buying it. The deal loses value as designed.'}`]);
   if(R.cf1<0)F.push(['bad',`Year-one cash flow is <b>${fm(R.cf1)}</b> &mdash; budget operating reserves or resize the loan.`]);
-  if(R.stab>18)F.push(['warn',`${R.stab} months to stabilize is long &mdash; carry and reserves must cover it (Bird&#8217;s Eye models the pre-opening carry).`]);
+  if(R.stab>18)F.push(['warn',`${R.stab} months to stabilize is long &mdash; carry and reserves must cover it (PermitPath models the pre-opening carry).`]);
   return F;}
 
 /* ---- pro ---- */
@@ -389,7 +395,7 @@ function run(){
       <div class="kpi"><b>${S.pro&&R.lIRR!=null?pc(R.lIRR):'\u{1F512}'}</b><small>10-yr levered IRR ${S.pro?'':'<span style="color:var(--gold)">Pro</span>'}</small></div>
     </div></div>`;
 
-  if(PP){h+=`<div class="bigcard"><div class="secl" style="margin-top:0">&#9203; Pre-opening carry (from Bird&#8217;s Eye)</div>
+  if(PP){h+=`<div class="bigcard"><div class="secl" style="margin-top:0">&#9203; Pre-opening carry (from PermitPath)</div>
     <p style="font-size:13.5px;color:var(--dim);margin:0">Your ${PP.st} run carries <b style="color:var(--ink)">${fm(PP.carry)}/month</b> before the doors open. Across your ${R.stab}-month stabilization window budget <b style="color:var(--amber)">${fm(PP.carry*R.stab)}</b> of reserves on top of TDC.</p></div>`;}
 
   const F=flags(R);
@@ -418,6 +424,7 @@ function run(){
     <div class="rowbtns" style="margin:0"><a class="smallbtn" href="${mail}">&#128231; Email this scenario</a>
     <button class="smallbtn" id="shareBtn">&#128279; Share</button>
     <button class="smallbtn" id="printBtn">&#128424; Lender exhibit ${S.pro?'':'\u{1F512}'}</button></div></div>
+  <div class="cta-neso"><p><b>Want the bank-ready version?</b> NESO\u2019s feasibility practice builds the full development pro forma \u2014 10-year operating model, sensitivity tables, and the go / no-go read \u2014 by planners who\u2019ve carried projects through lending.</p><a href="${NESO_CTA}" target="_blank" rel="noopener">Have NESO build it &rarr;</a></div>
   <p class="disc"><b>Read this:</b> ProForma is an educational planning tool. Rents, expenses, cap rates, and lending standards vary by market and year \u2014 every number here is a starting point for conversations with your lender, property manager, CPA, and attorney, not a substitute for them.</p>`;
 
   $('results').innerHTML=h;
@@ -445,87 +452,4 @@ proUI();run();
  b.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};}
  if(document.getElementById('scrollTop'))init();else document.addEventListener('DOMContentLoaded',init);})();
 </script>
-<div id="nesoChatRoot"></div>
-<style>
-#nchatBtn{position:fixed;right:20px;bottom:20px;z-index:120;display:flex;align-items:center;gap:9px;background:linear-gradient(90deg,#7c4dff,#a855f7);color:#fff;border:none;border-radius:999px;padding:13px 18px;font-family:Inter,system-ui,sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 10px 30px -8px rgba(124,77,255,.55)}
-#nchatBtn:hover{filter:brightness(1.07)}
-#nchatBtn svg{flex-shrink:0}
-#nchatPanel{position:fixed;right:20px;bottom:20px;z-index:121;width:min(380px,calc(100vw - 32px));height:min(560px,calc(100vh - 40px));background:#11161d;border:1px solid #232f3d;border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 24px 60px -16px rgba(0,0,0,.6);font-family:Inter,system-ui,sans-serif}
-#nchatPanel.on{display:flex}
-#nchatHead{background:linear-gradient(120deg,rgba(124,77,255,.18),rgba(168,85,247,.1));padding:13px 16px;border-bottom:1px solid #232f3d;display:flex;align-items:center;gap:10px}
-#nchatHead .dot{width:9px;height:9px;border-radius:50%;background:#34d399;box-shadow:0 0 0 3px rgba(52,211,153,.2)}
-#nchatHead b{color:#e9eef4;font-size:14px}
-#nchatHead span{color:#96a6b6;font-size:11px;display:block;margin-top:1px}
-#nchatHead .x{margin-left:auto;background:none;border:none;color:#96a6b6;font-size:22px;cursor:pointer;line-height:1}
-#nchatBody{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
-.nmsg{max-width:82%;padding:9px 13px;border-radius:14px;font-size:13.5px;line-height:1.45}
-.nmsg.bot{background:#1b2330;color:#e9eef4;align-self:flex-start;border-bottom-left-radius:4px}
-.nmsg.me{background:linear-gradient(90deg,#7c4dff,#a855f7);color:#fff;align-self:flex-end;border-bottom-right-radius:4px}
-.ntyping{align-self:flex-start;color:#5e7080;font-size:12px;padding:4px 6px}
-#nchatFoot{border-top:1px solid #232f3d;padding:10px;display:flex;gap:8px;align-items:flex-end;background:#0d1117}
-#nchatIn{flex:1;background:#161d26;border:1px solid #232f3d;border-radius:10px;color:#e9eef4;padding:10px 12px;font-size:13.5px;font-family:inherit;resize:none;max-height:100px;line-height:1.4}
-#nchatIn:focus{outline:none;border-color:#7c4dff}
-#nchatSend{background:#7c4dff;border:none;border-radius:10px;color:#fff;width:40px;height:40px;font-size:17px;cursor:pointer;flex-shrink:0}
-#nchatSend:disabled{opacity:.5;cursor:default}
-#nchatMic{background:#161d26;border:1px solid #232f3d;border-radius:10px;color:#96a6b6;width:40px;height:40px;font-size:16px;cursor:pointer;flex-shrink:0}
-#nchatMic.rec{color:#f87171;border-color:#f87171}
-.nchatalt{font-size:11px;color:#5e7080;text-align:center;padding:0 14px 10px}
-.nchatalt a{color:#7c4dff;text-decoration:none}
-@media print{#nchatBtn,#nchatPanel{display:none!important}}
-</style>
-<button id="nchatBtn" aria-label="Talk to us about your project">
-  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.38 8.38 0 0 1-8.5 8.5 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.7a8.5 8.5 0 0 1-.9-3.8A8.38 8.38 0 0 1 12.5 3 8.38 8.38 0 0 1 21 11.5z" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-  Tell us what you need
-</button>
-<div id="nchatPanel" role="dialog" aria-label="NESO intake chat">
-  <div id="nchatHead"><span class="dot"></span><div><b>NESO intake</b><span>Automated assistant · a real person follows up</span></div><button class="x" id="nchatX" aria-label="Close">&times;</button></div>
-  <div id="nchatBody"></div>
-  <div class="nchatalt">Prefer a form? <a href="https://tally.so/r/q4MLYg" target="_blank" rel="noopener">Use the intake form</a> · or text <a href="sms:+16623824084">(662) 382-4084</a></div>
-  <div id="nchatFoot">
-    <button id="nchatMic" title="Speak instead of typing" aria-label="Voice input">&#127908;</button>
-    <textarea id="nchatIn" rows="1" placeholder="Type or tap the mic&hellip;"></textarea>
-    <button id="nchatSend" aria-label="Send">&#8593;</button>
-  </div>
-</div>
-<script>
-(function(){
-  const CHAT_URL="https://neso-intake-worker.nesoai-us.workers.dev/chat"; // ← set to your deployed worker
-  const SOURCE=(location.pathname.replace(/\W+/g,'')||'web').slice(0,30);
-  const $=id=>document.getElementById(id);
-  let msgs=[], busy=false, greeted=false;
-  const panel=$('nchatPanel'), body=$('nchatBody'), inp=$('nchatIn');
-  function esc(t){return String(t).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
-  function add(role,text){const d=document.createElement('div');d.className='nmsg '+(role==='assistant'?'bot':'me');d.innerHTML=esc(text);body.appendChild(d);body.scrollTop=body.scrollHeight;}
-  function typing(on){let t=$('ntyping1');if(on&&!t){t=document.createElement('div');t.id='ntyping1';t.className='ntyping';t.textContent='typing…';body.appendChild(t);body.scrollTop=body.scrollHeight;}else if(!on&&t){t.remove();}}
-  async function send(text){
-    if(busy)return; busy=true; $('nchatSend').disabled=true;
-    if(text){add('user',text);msgs.push({role:'user',content:text});}
-    typing(true);
-    try{
-      const r=await fetch(CHAT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({messages:msgs,source:SOURCE})});
-      const j=await r.json(); typing(false);
-      if(j.reply){add('assistant',j.reply);msgs.push({role:'assistant',content:j.reply});}
-      if(j.complete){setTimeout(()=>add('assistant','Thanks — you\u2019re all set. A NESO principal will follow up personally. You can close this window.'),400);}
-    }catch(e){typing(false);add('assistant','Sorry \u2014 I had trouble connecting. Please use the intake form or text (662) 382-4084.');}
-    busy=false; $('nchatSend').disabled=false;
-  }
-  function open(){panel.classList.add('on');$('nchatBtn').style.display='none';inp.focus();
-    if(!greeted){greeted=true;send(null);}}
-  function close(){panel.classList.remove('on');$('nchatBtn').style.display='flex';}
-  $('nchatBtn').onclick=open; $('nchatX').onclick=close;
-  $('nchatSend').onclick=()=>{const v=inp.value.trim();if(v){inp.value='';inp.style.height='auto';send(v);}};
-  inp.addEventListener('input',()=>{inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,100)+'px';});
-  inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('nchatSend').click();}});
-  // voice input via Web Speech API (free, on-device where supported)
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(SR){const rec=new SR();rec.continuous=false;rec.interimResults=false;
-    $('nchatMic').onclick=()=>{try{rec.start();$('nchatMic').classList.add('rec');}catch(e){}};
-    rec.onresult=e=>{inp.value=(inp.value+' '+e.results[0][0].transcript).trim();inp.dispatchEvent(new Event('input'));};
-    rec.onend=()=>$('nchatMic').classList.remove('rec');
-    rec.onerror=()=>$('nchatMic').classList.remove('rec');
-  } else { $('nchatMic').style.display='none'; }
-})();
-</script>
-<!-- END NESO INTAKE CHAT WIDGET -->
-
 </body></html>
