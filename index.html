@@ -198,7 +198,7 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
 </div>
 
 <button id="scrollTop" title="Back to top" aria-label="Back to top">↑</button>
-<footer><span>ProForma &middot; a <a href="https://nesoai.github.io/mallory/" target="_blank" rel="noopener">Boundless</a> tool &middot; v1.7 &middot; <a href="https://neso-queue.nesoai-us.workers.dev/form/feedback?source=proforma" target="_blank" rel="noopener">Feedback</a> &middot; &copy; 2026 Boundless &mdash; all rights reserved &middot; </span>Educational planning estimates only. Verify every figure with your lender, CPA, and counsel. Works with <a href="https://nesoai.github.io/permitpath/">PermitPath</a> + <a href="https://nesoai.github.io/capstack/">CapStack</a> + <a href="https://nesoai.github.io/marketscope/">MarketScope</a>.</footer>
+<footer><span>ProForma &middot; v1.9 &middot; <a href="https://neso-queue.nesoai-us.workers.dev/form/feedback?source=proforma" target="_blank" rel="noopener">Feedback</a> &middot; &copy; 2026 NESO &mdash; all rights reserved &middot; </span>Educational planning estimates only. Verify every figure with your lender, CPA, and counsel. Works with <a href="https://nesohq.com/">PermitPath</a> + <a href="https://capstack.nesohq.com/">CapStack</a> + <a href="https://marketscope.nesohq.com/">MarketScope</a>.</footer>
 <div id="modal"><div id="mcard"><button class="closex" id="mClose">&times;</button><h2 id="mTitle"></h2><div id="mBody"></div></div></div>
 <div id="toast"></div>
 <div id="tourCard" role="dialog" aria-label="Guided tour">
@@ -211,7 +211,7 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
 /* ============ PROFORMA v1.0 ============ */
 const BUY_URL="https://nesoai.gumroad.com/l/uiwox";
 const PRICE_TXT="$39 one-time";
-const SERVICE_EMAIL="nesoai.us@gmail.com";
+const SERVICE_EMAIL="hello@nesohq.com";
 const NESO_CTA="https://neso-queue.nesoai-us.workers.dev/form/intake?track=re&services="+encodeURIComponent("Development Feasibility (Standard)")+"&credits=12&source=proforma";
 const $=id=>document.getElementById(id);
 const KEY='proforma.v1';
@@ -412,14 +412,14 @@ function run(){
 
   // the loop back to CapStack
   const csPayload={t:R.tdc,n:Math.round(R.noi),p:'mkt',o:['senior','equity'],v:{},a:{rate:R.rate,amort:R.am,dscr:1.20,ltc:65,cprice:0.87,basis:80,hprice:0.90,qre:75,fee:12,defer:60}};
-  const csURL='https://nesoai.github.io/capstack/#s='+btoa(unescape(encodeURIComponent(JSON.stringify(csPayload)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
+  const csURL='https://capstack.nesohq.com/#s='+btoa(unescape(encodeURIComponent(JSON.stringify(csPayload)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
   h+=`<div class="bigcard"><div class="secl">Close the loop</div>
     <p style="font-size:13.5px;color:var(--dim);margin:0 0 12px">This NOI (<b style="color:var(--ink)">${fm(R.noi)}</b>) is what sizes your senior loan. Send it to CapStack and the stack rebuilds around what the building can actually carry.</p>
     <div class="rowbtns" style="margin:0"><a class="loopbtn" style="text-decoration:none" href="${csURL}" target="_blank" rel="noopener">&#8594; Rebuild my stack in CapStack</a></div></div>`;
 
   const scen='NOI '+fm(R.noi)+' \u00b7 DSCR '+(R.dscr!=null?R.dscr.toFixed(2):'\u2014')+' \u00b7 YoC '+pc(R.yoc)+' \u00b7 '+R.units+(TYPE==='com'?' SF':' units');
-  const mail='mailto:'+SERVICE_EMAIL+'?subject='+encodeURIComponent('ProForma \u2014 build my full operating model')+'&body='+encodeURIComponent('Hi Boundless,\n\nPlease quote a full 10-year operating model / pro forma package.\n\nScenario: '+scen+'\n\nProject details:\nTiming:\n');
-  h+=`<div class="bigcard"><div class="secl">Done for you \u2014 by the Boundless team</div>
+  const mail='mailto:'+SERVICE_EMAIL+'?subject='+encodeURIComponent('ProForma \u2014 build my full operating model')+'&body='+encodeURIComponent('Hi NESO,\n\nPlease quote a full 10-year operating model / pro forma package.\n\nScenario: '+scen+'\n\nProject details:\nTiming:\n');
+  h+=`<div class="bigcard"><div class="secl">Done for you \u2014 by the NESO team</div>
     <p style="font-size:13.5px;color:var(--dim);margin:0 0 12px">Bank-ready operating models, sensitivity tables, and lender narratives \u2014 built on an MBA + civil-engineering foundation. Typical engagements $500\u2013$4,000.</p>
     <div class="rowbtns" style="margin:0"><a class="smallbtn" href="${mail}">&#128231; Email this scenario</a>
     <button class="smallbtn" id="shareBtn">&#128279; Share</button>
@@ -452,4 +452,14 @@ proUI();run();
  b.onclick=function(){window.scrollTo({top:0,behavior:'smooth'})};}
  if(document.getElementById('scrollTop'))init();else document.addEventListener('DOMContentLoaded',init);})();
 </script>
+
+<!-- back to top -->
+<button id="toTop" aria-label="Back to top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+<style>
+#toTop{position:fixed;left:16px;bottom:20px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);display:grid;place-items:center;cursor:pointer;box-shadow:0 8px 22px -8px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(10px);transition:.25s;z-index:150}
+#toTop.on{opacity:1;visibility:visible;transform:none}
+#tourCard.on~#toTop{display:none!important}
+@media print{#toTop{display:none!important}}
+</style>
+<script>(function(){var b=document.getElementById('toTop');function chk(){if(window.scrollY>500)b.classList.add('on');else b.classList.remove('on');}window.addEventListener('scroll',chk,{passive:true});chk();})();</script>
 </body></html>
