@@ -121,11 +121,21 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
 #scrollTop.on{display:flex}
 #scrollTop:hover{filter:brightness(1.12)}
 @media print{#scrollTop{display:none!important}}
+
+/* "By NESO" byline — v2 house rule: every tool says whose it is, quietly, under
+   its own name. The tools are the top of NESO's funnel; a visitor who likes one
+   and cannot tell who made it is a lead lost to good work. */
+#logo{position:relative}
+#logo .byneso{display:block;font-family:Inter,system-ui,sans-serif;font-size:9.5px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--faint,#8698aa);margin-top:1px}
+#logo .byneso a{color:inherit;text-decoration:none;border-bottom:1px solid transparent}
+#logo .byneso a:hover{color:var(--ink,#e9eef4);border-bottom-color:currentColor}
+#logo .lgwrap{display:flex;flex-direction:column;line-height:1.12}
 </style>
 </head>
 <body>
 <header>
-  <div id="logo"><svg width="25" height="25" viewBox="0 0 32 32"><path d="M6 25 L13 17 L18 20 L26 8" fill="none" stroke="#a78bfa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="8" r="2.6" fill="#eab308"/></svg> Pro<b>Forma</b></div>
+  <div id="logo"><svg width="25" height="25" viewBox="0 0 32 32"><path d="M6 25 L13 17 L18 20 L26 8" fill="none" stroke="#a78bfa" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="26" cy="8" r="2.6" fill="#eab308"/></svg><span class="lgwrap"><span>Pro<b>Forma</b></span><span class="byneso"><a href="https://nesohq.com/" target="_blank" rel="noopener">by NESO</a></span></span></div>
   <div class="hsp"></div>
   <button class="pill" id="tourBtn" title="Replay the 60-second tour">&#127891; Tour</button>
   <button class="pill pro" id="proBtn">Go Pro</button>
@@ -198,7 +208,7 @@ footer{border-top:1px solid var(--line);padding:20px;text-align:center;font-size
 </div>
 
 <button id="scrollTop" title="Back to top" aria-label="Back to top">↑</button>
-<footer><span>ProForma &middot; v1.9 &middot; <a href="https://neso-queue.nesoai-us.workers.dev/form/feedback?source=proforma" target="_blank" rel="noopener">Feedback</a> &middot; &copy; 2026 NESO &mdash; all rights reserved &middot; </span>Educational planning estimates only. Verify every figure with your lender, CPA, and counsel. Works with <a href="https://nesohq.com/">PermitPath</a> + <a href="https://capstack.nesohq.com/">CapStack</a> + <a href="https://marketscope.nesohq.com/">MarketScope</a>.</footer>
+<footer><span>ProForma &middot; v1.10 &middot; <a href="https://neso-queue.nesoai-us.workers.dev/form/feedback?source=proforma" target="_blank" rel="noopener">Feedback</a> &middot; &copy; 2026 NESO &mdash; all rights reserved &middot; </span>Educational planning estimates only. Verify every figure with your lender, CPA, and counsel. Works with <a href="https://nesohq.com/">PermitPath</a> + <a href="https://capstack.nesohq.com/">CapStack</a> + <a href="https://marketscope.nesohq.com/">MarketScope</a>.</footer>
 <div id="modal"><div id="mcard"><button class="closex" id="mClose">&times;</button><h2 id="mTitle"></h2><div id="mBody"></div></div></div>
 <div id="toast"></div>
 <div id="tourCard" role="dialog" aria-label="Guided tour">
@@ -392,7 +402,7 @@ function run(){
       <div class="kpi"><b style="color:${R.yoc>=R.cap?'var(--green)':'var(--bad)'}">${pc(R.yoc)}</b><small>Yield on cost <span class="tip" tabindex="0">?<span class="tipbox">NOI &divide; total development cost. Compare it to the exit cap rate \u2014 higher means you are building value.</span></span></small></div>
       <div class="kpi"><b style="color:${good?'var(--green)':'var(--bad)'}">${R.dscr!=null?R.dscr.toFixed(2)+'x':'\u2014'}</b><small>DSCR <span class="tip" tabindex="0">?<span class="tipbox">Debt service coverage: NOI &divide; annual loan payments. Lenders typically require at least 1.20x.</span></span></small></div>
       <div class="kpi"><b>${pc(R.coc)}</b><small>Cash-on-cash <span class="tip" tabindex="0">?<span class="tipbox">Year-one cash flow after debt &divide; the equity you put in.</span></span></small></div>
-      <div class="kpi"><b>${S.pro&&R.lIRR!=null?pc(R.lIRR):'\u{1F512}'}</b><small>10-yr levered IRR ${S.pro?'':'<span style="color:var(--gold)">Pro</span>'}</small></div>
+      <div class="kpi"><b>${R.lIRR!=null?pc(R.lIRR):'\u2014'}</b><small>10-yr levered IRR</small></div>
     </div></div>`;
 
   if(PP){h+=`<div class="bigcard"><div class="secl" style="margin-top:0">&#9203; Pre-opening carry (from PermitPath)</div>
