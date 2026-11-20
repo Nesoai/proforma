@@ -1,0 +1,35 @@
+# ProForma
+
+> Model your operating pro forma: NOI, DSCR, yield on cost, cash-on-cash, and a 10-year cash flow — and answer the lender.
+
+ProForma is a free web tool at https://proforma.nesohq.com/. It runs in the browser with no account.
+It is for owners, developers and investors underwriting an income property.
+
+## Questions ProForma answers
+
+- **What debt service coverage ratio do lenders require?** Most stabilized multifamily and commercial lenders underwrite to roughly 1.20–1.25x, with agency and low-leverage programs sometimes accepting less and construction or bridge lenders asking for more.
+- **How is net operating income calculated?** Gross potential income, less vacancy and credit loss, plus other income, less operating expenses — and specifically before debt service, capital expenditure, depreciation and income tax.
+- **What is the difference between yield on cost and cash-on-cash return?** Yield on cost is stabilized NOI divided by total project cost, and it ignores financing — it tells you whether the asset itself is worth building.
+- **How do I know whether the building pays back the loan?** Compare stabilized NOI against annual debt service at a realistic interest rate and amortization, then stress it: lower rents by five percent, raise vacancy, add a rate point.
+
+## Use it
+
+- [Open ProForma](https://proforma.nesohq.com/)
+
+## About NESO
+
+ProForma is made by NESO HQ LLC, which offers advisory services, research reports and free tools for founders,
+small businesses, developers and municipalities: https://nesohq.com/ (its llms.txt: https://nesohq.com/llms.txt).
+Questions: hello@nesohq.com · (901) 295-0322.
+
+## Other free NESO tools
+
+- [GrantFit](https://grantfit.nesohq.com/)
+- [MarketFit](https://marketfit.nesohq.com/)
+- [PlanForge](https://planforge.nesohq.com/)
+- [MarketScope](https://marketscope.nesohq.com/)
+- [CapStack](https://capstack.nesohq.com/)
+- [SiteShaper](https://siteshaper.nesohq.com/)
+- [BuildBrief](https://buildbrief.nesohq.com/)
+- [Bird's Eye instant read](https://birdseye.nesohq.com/): a free first look at a parcel, with written reports quoted to scope.
+- [NESO for Contractors](https://contractors.nesohq.com/): free public bids and state-by-state guides for contractors.
